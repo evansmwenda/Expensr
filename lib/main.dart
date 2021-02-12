@@ -1,4 +1,5 @@
 import 'package:expensr/screens/Homepage.dart';
+import 'package:expensr/screens/add_expense.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -15,6 +16,7 @@ void main() {
       initialRoute: '/',
       routes: {
         '/': (context) => Homepage(),//MyApp(),
+        AddExpense.routeName: (context) => AddExpense(),//AddExpense page
        },
     ),
   );
