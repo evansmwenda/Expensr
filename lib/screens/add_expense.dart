@@ -17,6 +17,7 @@ class _AddExpenseState extends State<AddExpense> {
   DateTime selectedDate = DateTime.now();
   var myFormat = DateFormat('d-MM-yyyy');
   TextEditingController _datecontroller = new TextEditingController();
+  int _value = 1;
   // DateTime selectedDate =  DateFormat("dd-MM-yyyy").format(DateTime.now());
 
   Future<Null> _selectDate(BuildContext context) async {
@@ -61,14 +62,21 @@ class _AddExpenseState extends State<AddExpense> {
               },
               onSaved: (val) => setState(() => _expense.amount = val),
             ),
-            TextFormField(
-              decoration: InputDecoration(labelText: 'Category'),
-              validator: (value) {
-                if (value.isEmpty) {
-                  return 'Please enter the category of your expense.';
-                }
-              },
-              onSaved: (val) => setState(() => _expense.category = val),
+            Container(
+              padding: EdgeInsets.only(top:10.0),
+              child: DropdownButton(
+                  value: _value,style: TextStyle(color: Colors.cyan),
+                  onChanged: (value){
+                    setState(() {
+                      _value = value;
+                    });
+                  },
+                  items: [
+                  DropdownMenuItem(child: Text("Category 1"),value: 1,),
+                  DropdownMenuItem(child: Text("Category 2"),value: 2,),
+                  DropdownMenuItem(child: Text("Category 3"),value: 3,),
+                  DropdownMenuItem(child: Text("Category 4"),value: 4,),
+                ],),
             ),
             SizedBox(
               height: 20.0,
