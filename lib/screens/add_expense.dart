@@ -7,13 +7,23 @@ class AddExpense extends StatefulWidget {
 }
 
 class _AddExpenseState extends State<AddExpense> {
+  final _formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text("Add Expense"),
       ),
-      body: Center(child: Text("Add expense here"),),
+      body: Container(
+        child: Form(
+            key: _formKey,
+            child: Column(
+                children: <Widget>[
+                  // Add TextFormFields and ElevatedButton here.
+                ]
+            )
+        ),
+      ),
     );
   }
 }
