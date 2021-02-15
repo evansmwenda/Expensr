@@ -1,5 +1,9 @@
+import 'dart:convert';
+
+import 'package:expensr/models/user.dart';
 import 'package:expensr/screens/add_expense.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 
 class Homepage extends StatefulWidget {
   static const routeName = '/';
@@ -16,7 +20,6 @@ class _HomepageState extends State<Homepage> {
           floating: false,
           pinned: true,
           flexibleSpace: FlexibleSpaceBar(
-            centerTitle: true,
             title: Text("My Expenses",
                 style: TextStyle(
                   color: Colors.grey,
@@ -58,7 +61,10 @@ class _HomepageState extends State<Homepage> {
         SliverList(
           delegate: SliverChildBuilderDelegate(
             (context, index) => ListTile(
-              title: Text("List Item $index"),
+              contentPadding: EdgeInsets.symmetric(horizontal: 20.0),
+              trailing: Text("\$ 200",style: TextStyle(color: Colors.green),),
+              title: Text("Lunch at Big Square $index"),
+              subtitle: Text("Food",style: TextStyle(color:Colors.grey),),
             ),
           ),
         ),
@@ -70,6 +76,18 @@ class _HomepageState extends State<Homepage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: customScrollable(),
+      // body: FutureBuilder<List<User>>(
+      //         future: _fetchJobs(),
+      //         builder: (context, snapshot) {
+      //           if (snapshot.hasData) {
+      //             List<User> data = snapshot.data;
+      //             return _jobsListView(data);
+      //           } else if (snapshot.hasError) {
+      //             return Text("${snapshot.error}");
+      //           }
+      //           return Center(child: CircularProgressIndicator());
+      //         },
+      //       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           Navigator.pushNamed(context, AddExpense.routeName);
@@ -79,4 +97,39 @@ class _HomepageState extends State<Homepage> {
       ),
     );
   }
+
+  Future<List<User>> _fetchJobs() async {
+    final jobsListAPIUrl = 'https://jsonplaceholder.typicode.com/users';
+    final response = await http.get(jobsListAPIUrl);
+    if (response.statusCode == 200) {
+      List jsonResponse = json.decode(response.body);
+      return jsonResponse.map((job) => new User.fromJson(job)).toList();
+    } else {
+      throw Exception('Failed to load jobs from API');
+    }
+  }
+
+  Widget _jobsListView(data) {
+    return ListView.builder(
+        shrinkWrap: true,
+            itemCount: data.length,
+            itemBuilder: (context, index) {
+              return _tile(data[index].name, data[index].username, Icons.work);
+    });
+  }
+
+  ListTile _tile(String title, String subtitle, IconData icon) => ListTile(
+    title: Text(title,
+        style: TextStyle(
+          fontWeight: FontWeight.w500,
+          fontSize: 20,
+        )),
+    subtitle: Text(subtitle),
+    leading: Icon(
+      icon,
+      color: Colors.blue[500],
+    ),
+  );
+
+
 }
