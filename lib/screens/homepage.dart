@@ -12,7 +12,10 @@ class Homepage extends StatefulWidget {
 }
 
 class _HomepageState extends State<Homepage> {
-  customScrollable(data) {
+
+
+  customScrollable(int count,data) {
+    print("custom count->>"+ count.toString());
     return CustomScrollView(
       slivers: <Widget>[
         SliverAppBar(
@@ -59,7 +62,7 @@ class _HomepageState extends State<Homepage> {
           ),
         ),
         SliverList(
-          delegate: SliverChildListDelegate(_buildList(30)
+          delegate: SliverChildListDelegate(_buildList(count,data)
           // delegate: SliverChildBuilderDelegate(context,index) => _jobsListView(data)
 
 
@@ -85,7 +88,7 @@ class _HomepageState extends State<Homepage> {
                 if (snapshot.hasData) {
                   List<User> data = snapshot.data;
                   // return _jobsListView(data);
-                  return customScrollable(data);
+                  return customScrollable(data.length,data);
                 } else if (snapshot.hasError) {
                   return Text("${snapshot.error}");
                 }
@@ -113,14 +116,17 @@ class _HomepageState extends State<Homepage> {
     }
   }
 
-  List _buildList(int count) {
+  List _buildList(int count,dynamic data) {
     List<Widget> listItems = List();
 
+
+
     for (int i = 0; i < count; i++) {
+      print("item->"+i.toString()+"\t data->>"+data[i]);
       listItems.add(ListTile(
             contentPadding: EdgeInsets.symmetric(horizontal: 20.0),
             trailing: Text("\$ 200",style: TextStyle(color: Colors.green),),
-            title: Text("Lunch at Big Square $i"),
+            title: Text("list item $i"),
             subtitle: Text("Food",style: TextStyle(color:Colors.grey),),
           ));
     }
