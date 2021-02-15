@@ -12,7 +12,7 @@ class Homepage extends StatefulWidget {
 }
 
 class _HomepageState extends State<Homepage> {
-  customScrollable() {
+  customScrollable(data) {
     return CustomScrollView(
       slivers: <Widget>[
         SliverAppBar(
@@ -59,13 +59,16 @@ class _HomepageState extends State<Homepage> {
           ),
         ),
         SliverList(
-          delegate: SliverChildBuilderDelegate(
-            (context, index) => ListTile(
-              contentPadding: EdgeInsets.symmetric(horizontal: 20.0),
-              trailing: Text("\$ 200",style: TextStyle(color: Colors.green),),
-              title: Text("Lunch at Big Square $index"),
-              subtitle: Text("Food",style: TextStyle(color:Colors.grey),),
-            ),
+          delegate: SliverChildListDelegate(_buildList(30)
+          // delegate: SliverChildBuilderDelegate(context,index) => _jobsListView(data)
+
+
+            // (context, index) => ListTile(
+            //   contentPadding: EdgeInsets.symmetric(horizontal: 20.0),
+            //   trailing: Text("\$ 200",style: TextStyle(color: Colors.green),),
+            //   title: Text("Lunch at Big Square $index"),
+            //   subtitle: Text("Food",style: TextStyle(color:Colors.grey),),
+            // ),
           ),
         ),
       ],
@@ -75,19 +78,20 @@ class _HomepageState extends State<Homepage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: customScrollable(),
-      // body: FutureBuilder<List<User>>(
-      //         future: _fetchJobs(),
-      //         builder: (context, snapshot) {
-      //           if (snapshot.hasData) {
-      //             List<User> data = snapshot.data;
-      //             return _jobsListView(data);
-      //           } else if (snapshot.hasError) {
-      //             return Text("${snapshot.error}");
-      //           }
-      //           return Center(child: CircularProgressIndicator());
-      //         },
-      //       ),
+      // body: customScrollable(),
+      body: FutureBuilder<List<User>>(
+              future: _fetchJobs(),
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  List<User> data = snapshot.data;
+                  // return _jobsListView(data);
+                  return customScrollable(data);
+                } else if (snapshot.hasError) {
+                  return Text("${snapshot.error}");
+                }
+                return Center(child: CircularProgressIndicator());
+              },
+            ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           Navigator.pushNamed(context, AddExpense.routeName);
@@ -109,9 +113,23 @@ class _HomepageState extends State<Homepage> {
     }
   }
 
-  Widget _jobsListView(data) {
+  List _buildList(int count) {
+    List<Widget> listItems = List();
+
+    for (int i = 0; i < count; i++) {
+      listItems.add(ListTile(
+            contentPadding: EdgeInsets.symmetric(horizontal: 20.0),
+            trailing: Text("\$ 200",style: TextStyle(color: Colors.green),),
+            title: Text("Lunch at Big Square $i"),
+            subtitle: Text("Food",style: TextStyle(color:Colors.grey),),
+          ));
+    }
+
+    return listItems;
+  }
+
+  _jobsListView(data) {
     return ListView.builder(
-        shrinkWrap: true,
             itemCount: data.length,
             itemBuilder: (context, index) {
               return _tile(data[index].name, data[index].username, Icons.work);
