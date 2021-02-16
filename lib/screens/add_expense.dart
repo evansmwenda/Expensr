@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:expensr/models/expense.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -18,6 +19,10 @@ class _AddExpenseState extends State<AddExpense> {
   var myFormat = DateFormat('d-MM-yyyy');
   TextEditingController _datecontroller = new TextEditingController();
   int _value = 1;
+
+  final fb = FirebaseDatabase.instance;
+  final myController = TextEditingController();
+  final name = "Name";
   // DateTime selectedDate =  DateFormat("dd-MM-yyyy").format(DateTime.now());
 
   Future<Null> _selectDate(BuildContext context) async {
@@ -34,6 +39,7 @@ class _AddExpenseState extends State<AddExpense> {
 
   @override
   Widget build(BuildContext context) {
+    final ref = fb.reference();
     return Scaffold(
       appBar: AppBar(
         title: Text("Add Expense"),

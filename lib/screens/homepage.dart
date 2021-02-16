@@ -62,7 +62,7 @@ class _HomepageState extends State<Homepage> {
           ),
         ),
         SliverList(
-          delegate: SliverChildListDelegate(_buildList(count,data)
+          delegate: SliverChildListDelegate(_jobsListView(data)
           // delegate: SliverChildBuilderDelegate(context,index) => _jobsListView(data)
 
 
@@ -81,20 +81,20 @@ class _HomepageState extends State<Homepage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // body: customScrollable(),
-      body: FutureBuilder<List<User>>(
-              future: _fetchJobs(),
-              builder: (context, snapshot) {
-                if (snapshot.hasData) {
-                  List<User> data = snapshot.data;
-                  // return _jobsListView(data);
-                  return customScrollable(data.length,data);
-                } else if (snapshot.hasError) {
-                  return Text("${snapshot.error}");
-                }
-                return Center(child: CircularProgressIndicator());
-              },
-            ),
+      body: customScrollable(30,6),
+      // body: FutureBuilder<List<User>>(
+      //         future: _fetchJobs(),
+      //         builder: (context, snapshot) {
+      //           if (snapshot.hasData) {
+      //             List<User> data = snapshot.data;
+      //             // return _jobsListView(data);
+      //             return customScrollable(data.length,data);
+      //           } else if (snapshot.hasError) {
+      //             return Text("${snapshot.error}");
+      //           }
+      //           return Center(child: CircularProgressIndicator());
+      //         },
+      //       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           Navigator.pushNamed(context, AddExpense.routeName);
